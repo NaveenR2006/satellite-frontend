@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import { v4 as uuidv4 } from 'uuid';
 
 const AddSatelliteForm = ({ onHome }) => {
   const [satellite, setSatellite] = useState({
-    id: "",
+    id: uuidv4(), // Generate a unique ID when the form is initialized
     name: "",
     orbitType: "",
     speed: "",
@@ -18,13 +19,14 @@ const AddSatelliteForm = ({ onHome }) => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent default form submission
+    e.preventDefault();
     try {
       const response = await fetch(`https://satellite-backend-gvxa.onrender.com/api/addsatellite`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...satellite,
+          id: uuidv4(), // Generate a new unique ID for each submission
           speed: Number(satellite.speed),
           altitude: Number(satellite.altitude),
           latitude: Number(satellite.latitude),
@@ -43,7 +45,7 @@ const AddSatelliteForm = ({ onHome }) => {
 
       // Clear the form fields after successful submission
       setSatellite({
-        id: "",
+        id: uuidv4(), // Generate a new ID for the next satellite
         name: "",
         orbitType: "",
         speed: "",
@@ -53,39 +55,153 @@ const AddSatelliteForm = ({ onHome }) => {
         visibility: "",
         details: "",
       });
-
-      // Navigate to home
-      onHome();
     } catch (error) {
-      console.error("Error:", error.message);
-      alert("Failed to add satellite.");
+      console.error("Error adding satellite:", error);
+      alert(error.message);
     }
   };
 
   return (
-    <div className="satellite-form-container">
-      <form className="satellite-form" onSubmit={handleSubmit}>
-        <h2>Add Satellite Details</h2>
+    <div className="container mx-auto p-4">
+      <form onSubmit={handleSubmit} className="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+            Name
+          </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={satellite.name}
+            onChange={handleChange}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            required
+          />
+        </div>
 
-        {Object.keys(satellite).map((field) => (
-          <div key={field} className="form-group">
-            <label htmlFor={field}>
-              {field.charAt(0).toUpperCase() + field.slice(1)}:
-            </label>
-            <input
-              type="text"
-              id={field}
-              name={field}
-              value={satellite[field]}
-              onChange={handleChange}
-            />
-          </div>
-        ))}
-        <button type="submit">Add Satellite</button>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="orbitType">
+            Orbit Type
+          </label>
+          <input
+            type="text"
+            id="orbitType"
+            name="orbitType"
+            value={satellite.orbitType}
+            onChange={handleChange}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            required
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="speed">
+            Speed (km/h)
+          </label>
+          <input
+            type="number"
+            id="speed"
+            name="speed"
+            value={satellite.speed}
+            onChange={handleChange}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            required
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="altitude">
+            Altitude (km)
+          </label>
+          <input
+            type="number"
+            id="altitude"
+            name="altitude"
+            value={satellite.altitude}
+            onChange={handleChange}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            required
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="latitude">
+            Latitude
+          </label>
+          <input
+            type="number"
+            id="latitude"
+            name="latitude"
+            value={satellite.latitude}
+            onChange={handleChange}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            required
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="longitude">
+            Longitude
+          </label>
+          <input
+            type="number"
+            id="longitude"
+            name="longitude"
+            value={satellite.longitude}
+            onChange={handleChange}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            required
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="visibility">
+            Visibility
+          </label>
+          <select
+            id="visibility"
+            name="visibility"
+            value={satellite.visibility}
+            onChange={handleChange}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            required
+          >
+            <option value="">Select visibility</option>
+            <option value="true">Visible</option>
+            <option value="false">Not Visible</option>
+          </select>
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="details">
+            Details
+          </label>
+          <textarea
+            id="details"
+            name="details"
+            value={satellite.details}
+            onChange={handleChange}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            required
+          />
+        </div>
+
+        <div className="flex items-center justify-between">
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          >
+            Add Satellite
+          </button>
+          <button
+            type="button"
+            onClick={onHome}
+            className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          >
+            Back to Home
+          </button>
+        </div>
       </form>
-      <button type="button" onClick={onHome} className="home-button">
-        Home
-      </button>
     </div>
   );
 };
