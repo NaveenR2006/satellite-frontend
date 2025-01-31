@@ -20,7 +20,7 @@ const AddSatelliteForm = ({ onHome }) => {
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission
     try {
-      const response = await fetch(`http://localhost:3000/api/addsatellite`, {
+      const response = await fetch(`https://satellite-backend-gvxa.onrender.com/api/addsatellite`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

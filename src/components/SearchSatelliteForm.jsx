@@ -8,7 +8,7 @@ const SearchSatelliteForm = ({ onHome }) => {
     e.preventDefault();
     try {
       const response = await fetch(
-        `http://localhost:3000/api/satellite?name=${satelliteName}`
+        `https://satellite-backend-gvxa.onrender.com/api/satellite?name=${satelliteName}`
       );
       if (!response.ok) throw new Error("Failed to fetch satellite");
       const data = await response.json();

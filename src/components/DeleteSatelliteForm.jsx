@@ -6,7 +6,7 @@ const DeleteSatelliteForm = ({ onHome }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:3000/api/delsatellite/${satelliteId}`, {
+      const response = await fetch(`https://satellite-backend-gvxa.onrender.com/api/delsatellite/${satelliteId}`, {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Failed to delete satellite");
